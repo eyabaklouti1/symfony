@@ -21,12 +21,12 @@ class Subcategory
     /**
      * @var Collection<int, category>
      */
-    #[ORM\ManyToMany(targetEntity: category::class, inversedBy: 'subcategories')]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'subcategories')]
     private Collection $category_id;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?product $pr_id = null;
+    private ?Product $pr_id = null;
 
     public function __construct()
     {
@@ -58,12 +58,12 @@ class Subcategory
         return $this->category_id;
     }
 
-    public function getPrId(): ?product
+    public function getPrId(): ?Product
     {
         return $this->pr_id;
     }
 
-    public function setPrId(product $pr_id): static
+    public function setPrId(Product $pr_id): static
     {
         $this->pr_id = $pr_id;
 
