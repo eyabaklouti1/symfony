@@ -22,6 +22,10 @@ class Product
     #[ORM\Column]
     private ?float $price = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?category $category_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -57,6 +61,18 @@ class Product
     public function setPrice(float $price): static
     {
         $this->price = $price;
+        return $this;
+    }
+
+    public function getCategoryId(): ?category
+    {
+        return $this->category_id;
+    }
+
+    public function setCategoryId(category $category_id): static
+    {
+        $this->category_id = $category_id;
+
         return $this;
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SubcategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubcategoryRepository::class)]
@@ -15,6 +17,21 @@ class Subcategory
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+    /**
+     * @var Collection<int, category>
+     */
+    #[ORM\ManyToMany(targetEntity: category::class, inversedBy: 'subcategories')]
+    private Collection $category_id;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?product $pr_id = null;
+
+    public function __construct()
+    {
+        $this->category_id = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -33,5 +50,26 @@ class Subcategory
         return $this;
     }
 
+    /**
+     * @return Collection<int, category>
+     */
+    public function getCategoryId(): Collection
+    {
+        return $this->category_id;
+    }
+
+    public function getPrId(): ?product
+    {
+        return $this->pr_id;
+    }
+
+    public function setPrId(product $pr_id): static
+    {
+        $this->pr_id = $pr_id;
+
+        return $this;
+    }
+
+   
 }
 
