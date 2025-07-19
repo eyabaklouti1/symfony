@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product List{% endblock %}
+
+{% block body %}
+<h1>Product List</h1>
+
+{% for message in app.flashes('message') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+
+<table border="1" cellpadding="10">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Category ID</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for product in products %}
+        <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.categoryId.id }}</td>
+            <td>
+                <a href="{{ path('read_product', {'id': product.id}) }}">View</a> |
+                <a href="{{ path('edit_product', {'id': product.id}) }}">Edit</a> |
+                <a href="{{ path('delete_product', {'id': product.id}) }}">Delete</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr><td colspan="6">No products found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ path('create_product') }}"> Add New Product</a>
+{% endblock %}
+
+
+
+
