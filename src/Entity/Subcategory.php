@@ -26,7 +26,7 @@ class Subcategory
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Product $pr_id = null;
+    private ?Product $product_id = null;
 
     public function __construct()
     {
@@ -58,14 +58,14 @@ class Subcategory
         return $this->category_id;
     }
 
-    public function getPrId(): ?Product
+    public function getProductId(): ?Product
     {
-        return $this->pr_id;
+        return $this->product_id;
     }
 
-    public function setPrId(Product $pr_id): static
+    public function setProductId(Product $product_id): static
     {
-        $this->pr_id = $pr_id;
+        $this->product_id = $product_id;
 
         return $this;
     }

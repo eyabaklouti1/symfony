@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Subcategory Details{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Subcategory Details</h1>
+
+    <ul class="list-group">
+        <li class="list-group-item"><strong>ID:</strong> {{ subcategory.id }}</li>
+        <li class="list-group-item"><strong>Name:</strong> {{ subcategory.name }}</li>
+        {# Add more fields here if needed #}
+    </ul>
+
+    <a href="{{ path('app_subcategory') }}" class="btn btn-secondary mt-3">Back to list</a>
+{% endblock %}
