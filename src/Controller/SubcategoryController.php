@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Form\SubcategoryType;
 use App\Entity\Subcategory;
+use App\Entity\Category; 
+use App\Entity\Product;  
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,11 +35,20 @@ final class SubcategoryController extends AbstractController
         $form = $this->createForm(SubcategoryType::class, $subcategory);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
-            $this->em->persist($subcategory);
-            $this->em->flush();
+        $category = $this->em->getRepository(Category::class)->find($categoryId); // Récupère la catégorie depuis la base de données en utilisant son ID.
+        $product = $this->em->getRepository(Product::class)->find($productId);// Récupère le produit depuis la base de données en utilisant son ID.
 
-            $this->addFlash('message','Inserted Successfully.');
-            return $this->redirectToRoute('app_subcategory');
+        if (!$category || !$product) {
+            throw $this->createNotFoundException('Category or Product not found');
+        }
+
+        $subcategory->setCategory($category);
+        $subcategory->setProduct($product); //Associe la sous-catégorie à la catégorie et au produit récupérés.
+        $this->em->persist($subcategory);
+         $this->em->flush();
+
+        $this->addFlash('message','Inserted Successfully.');
+        return $this->redirectToRoute('app_subcategory');
 
         }
         return $this->render('subcategorycontroller/create.html.twig',[

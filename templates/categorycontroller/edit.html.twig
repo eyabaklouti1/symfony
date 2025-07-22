@@ -3,12 +3,14 @@
 {% block title %}Edit Category{% endblock %}
 
 {% block body %}
-    <h1>Edit Category</h1>
+<h1>Edit Category</h1>
 
-    {{ form_start(form) }}
-        {{ form_row(form.name) }}
-        <button class="btn btn-primary">Update</button>
-    {{ form_end(form) }}
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit">Update</button>
+{{ form_end(form) }}
 
-    <a href="{{ path('category_index') }}">⬅ Back to list</a>
+<a href="{{ path('app_categorycontroller') }}">Back to List</a>
 {% endblock %}
+
+

@@ -15,11 +15,7 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('subcategories', EntityType::class, [
-                'class' => Subcategory::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
+            
         ;
     }
 

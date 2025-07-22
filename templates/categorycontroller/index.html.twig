@@ -1,20 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CategorycontrollerController!{% endblock %}
+{% block title %}Product List{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<h1>Category List</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% for message in app.flashes('message') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/laragon/www/my_project/src/Controller/CategorycontrollerController.php</code></li>
-        <li>Your template at <code>C:/laragon/www/my_project/templates/categorycontroller/index.html.twig</code></li>
-    </ul>
-</div>
+<table border="1" cellpadding="10">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for category in categories %}
+        <tr>
+            <td>{{ category.id }}</td>
+            <td>{{ category.name }}</td>
+        
+            <td>
+                <a href="{{ path('read_category', {'id': category.id}) }}">View</a> |
+                <a href="{{ path('edit_category', {'id': category.id}) }}">Edit</a> |
+                <a href="{{ path('delete_category', {'id': category.id}) }}">Delete</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr><td colspan="6">No categories found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ path('create_category') }}"> Add New Category</a>
 {% endblock %}
+
+
+
+

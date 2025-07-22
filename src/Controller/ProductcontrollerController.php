@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\ProductType;
 use App\Entity\Product;
+use App\Entity\Category; 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +30,11 @@ final class ProductcontrollerController extends AbstractController
                 'products' => $products
         ]);
     }
+    //findAll() - SELECT * FROM product;
+    //find() - SELECT * from product WHERE id = 5;
+    // findBy() - SELECT *from producut ORDER BY id DESC.
+    // findOneBy() - SELECT * from product WHERE id = 6 AND title = '' ORDERBY id DESC.
+    // COUNT() - SLECT COUNT() from product WHERE id = 1;
 
     #[Route('/create-product', name: 'create_product')] 
     public function createproduct(Request $request)
@@ -37,8 +43,15 @@ final class ProductcontrollerController extends AbstractController
         $form = $this->createForm(ProductType::class, $product); //générer le formulaire
         $form->handleRequest($request); //remplir le formulaire avec les données soumises
         if($form->isSubmitted() && $form->isValid()){
-            $this->em->persist($product); //pour enregistrer une entité
-            $this->em->flush(); //flush() : pour exécuter les requêtes SQL
+
+            $category = $this->em->getRepository(Category::class)->findOneBy(['name'=> $category_id]); 
+            if (!$category) {
+                throw $this->createNotFoundException('Category not found.');
+            }
+            $product->setCategory($category); 
+
+            $this->em->persist($product);
+            $this->em->flush();
 
 
             $this->addFlash('message','Inserted Successfully.');

@@ -21,9 +21,8 @@ class Category
     /**
      * @var Collection<int, Subcategory>
      */
-    #[ORM\ManyToMany(targetEntity: Subcategory::class, mappedBy: 'category_id')]
+   #[ORM\ManyToMany(targetEntity: Subcategory::class, inversedBy: 'categories')]
     private Collection $subcategories;
-
     public function __construct()
     {
         $this->subcategories = new ArrayCollection();

@@ -21,8 +21,8 @@ class Subcategory
     /**
      * @var Collection<int, category>
      */
-    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'subcategories')]
-    private Collection $category_id;
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'subcategories')]
+private Collection $categories;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
