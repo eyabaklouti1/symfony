@@ -24,9 +24,11 @@ final class SubcategoryController extends AbstractController
     #[Route('/subcategorycontroller', name: 'app_subcategory')]
     public function index(): Response
     {
-        return $this->render('subcategorycontroller/index.html.twig', [
-            'controller_name' => 'SubcategoryController',
+        $subcategories = $this->em->getRepository(Subcategory::class)->findAll();
+        return $this->render('subcategorycontroller/index.html.twig',[
+            'subcategories' => $subcategories
         ]);
+        
     }
     #[Route('/create-subcategory', name:'create_subcategory')]
     public function createsubcategory(Request $request): Response
@@ -35,20 +37,19 @@ final class SubcategoryController extends AbstractController
         $form = $this->createForm(SubcategoryType::class, $subcategory);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
-        $category = $this->em->getRepository(Category::class)->find($categoryId); // Récupère la catégorie depuis la base de données en utilisant son ID.
-        $product = $this->em->getRepository(Product::class)->find($productId);// Récupère le produit depuis la base de données en utilisant son ID.
-
-        if (!$category || !$product) {
-            throw $this->createNotFoundException('Category or Product not found');
-        }
-
-        $subcategory->setCategory($category);
-        $subcategory->setProduct($product); //Associe la sous-catégorie à la catégorie et au produit récupérés.
-        $this->em->persist($subcategory);
-         $this->em->flush();
-
-        $this->addFlash('message','Inserted Successfully.');
-        return $this->redirectToRoute('app_subcategory');
+            $category = $this->em->getRepository(Category::class)->findOneBy(['name' => $category_id]);
+            $product = $this->em->getRepository(Product::class)->findOneBy(['name'=> $product_id]);
+            if (!$category || !$product){
+                throw $this->createNotFoundException('Category or Product not found');
+            }
+            $subcategory->setCategory($category);
+            $subcategory->setProduct($product);
+        
+            $this->em->persist($subcategory);
+            $this->em->flush();
+       
+            $this->addFlash('message','Inserted Successfully.');
+            return $this->redirectToRoute('app_subcategory');
 
         }
         return $this->render('subcategorycontroller/create.html.twig',[
@@ -59,25 +60,26 @@ final class SubcategoryController extends AbstractController
     public function readsubcategory(int $id): Response
     {
         $subcategory = $this->em->getRepository(Subcategory::class)->find($id);
-        if (!$subcategry){
+        if (!$subcategory){
             throw $this->createNotFoundException('Subcategory not found!');
         }
         return $this->render('subcategorycontroller/read.html.twig',[
             'subcategory'=> $subcategory
         ]);
     }
+    
     #[Route('/edit-subcategory/{id}', name:'edit_subcategory')]
     public function editsubcategory(Request $request ,int $id): Response
     {
-        $subcategory = $this->getRepository(Subcategory::class)->find($id);
+        $subcategory = $this->em->getRepository(Subcategory::class)->find($id);
         if (!$subcategory){
             throw $this->createNotFoundException('Subcategory not found!');
            
         }
-        $form = $this->em->createForm(SubcategoryType::class,$subcategory);
+        $form = $this->createForm(SubcategoryType::class,$subcategory);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $this->em->presist($subcategory);
+            $this->em->persist($subcategory);
             $this->em->flush();
 
             $this->addFlash('message','Updated Successfully.');

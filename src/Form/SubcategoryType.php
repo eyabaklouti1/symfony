@@ -16,6 +16,14 @@ class SubcategoryType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('category_id', EntityType::class, [
+                'class' => Category::class
+            ])
+            ->add('product_id', EntityType::class, [
+                'class' => Product::class
+            ])
+            
+            
             
         ;
     }
@@ -24,6 +32,7 @@ class SubcategoryType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Subcategory::class,
+
         ]);
     }
 }

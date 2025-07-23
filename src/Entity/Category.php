@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -18,15 +16,9 @@ class Category
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
-    /**
-     * @var Collection<int, Subcategory>
-     */
-   #[ORM\ManyToMany(targetEntity: Subcategory::class, inversedBy: 'categories')]
-    private Collection $subcategories;
-    public function __construct()
-    {
-        $this->subcategories = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'categories')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Subcategory $subcategory = null;
 
     public function getId(): ?int
     {
@@ -43,15 +35,21 @@ class Category
         $this->name = $name;
         return $this;
     }
-/*
-    /**
-     * @return Collection<int, Subcategory>
-     */
-    public function getSubcategories(): Collection
+
+    public function getSubcategory(): ?Subcategory
     {
-        return $this->subcategories;
+        return $this->subcategory;
     }
 
-   
-}
+    public function setSubcategory(?Subcategory $subcategory): static
+    {
+        $this->subcategory = $subcategory;
+        return $this;
+    }
 
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+}
+    

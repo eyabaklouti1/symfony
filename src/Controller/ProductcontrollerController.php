@@ -30,39 +30,28 @@ final class ProductcontrollerController extends AbstractController
                 'products' => $products
         ]);
     }
-    //findAll() - SELECT * FROM product;
-    //find() - SELECT * from product WHERE id = 5;
-    // findBy() - SELECT *from producut ORDER BY id DESC.
-    // findOneBy() - SELECT * from product WHERE id = 6 AND title = '' ORDERBY id DESC.
-    // COUNT() - SLECT COUNT() from product WHERE id = 1;
-
-    #[Route('/create-product', name: 'create_product')] 
-    public function createproduct(Request $request)
-    {
-        $product = new Product();   //the object of the entity
-        $form = $this->createForm(ProductType::class, $product); //générer le formulaire
-        $form->handleRequest($request); //remplir le formulaire avec les données soumises
-        if($form->isSubmitted() && $form->isValid()){
-
-            $category = $this->em->getRepository(Category::class)->findOneBy(['name'=> $category_id]); 
-            if (!$category) {
-                throw $this->createNotFoundException('Category not found.');
-            }
-            $product->setCategory($category); 
-
-            $this->em->persist($product);
-            $this->em->flush();
 
 
-            $this->addFlash('message','Inserted Successfully.');
-            return $this->redirectToRoute('app_productcontroller');
-        }
-        return $this->render('productcontroller/create.html.twig', [
-            'form' => $form->createView(), // product.html.twig contient le code HTML du formulaire.
+    #[Route('/create-product', name: 'create_product')]
+public function createproduct(Request $request): Response
+{
+    $product = new Product();
+    $form = $this->createForm(ProductType::class, $product);
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
 
+        $this->em->persist($product);
+        $this->em->flush();
 
-        ]);
+        $this->addFlash('message', 'Product inserted successfully.');
+        return $this->redirectToRoute('app_productcontroller');
     }
+
+    return $this->render('productcontroller/create.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
+
     #[Route('/read-product/{id}', name:'read_product')]
     public function readproduct(int $id): Response
     {
@@ -105,8 +94,14 @@ final class ProductcontrollerController extends AbstractController
            $this->addFlash('error', 'Product not found.');
         return $this->redirectToRoute('app_productcontroller');
         }
-        $this->em->remove($product);
-        $this->em->flush();
+       try {
+            $this->em->remove($product);
+            $this->em->flush();
+            $this->addFlash('message','Deleted Successfully.');
+        } catch (\Exception $e) {
+              $this->addFlash('error', 'Error deleting product: '.$e->getMessage());
+    }
+
 
         $this->addFlash('message','Deleted Syccessfully.');
         return $this->redirectToRoute('app_productcontroller');

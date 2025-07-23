@@ -18,11 +18,8 @@ class Subcategory
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    /**
-     * @var Collection<int, category>
-     */
-    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'subcategories')]
-private Collection $categories;
+    #[ORM\OneToMany(mappedBy: 'subcategory', targetEntity: Category::class, cascade: ['persist', 'remove'])]
+    private Collection $categories;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -30,9 +27,8 @@ private Collection $categories;
 
     public function __construct()
     {
-        $this->category_id = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -50,12 +46,28 @@ private Collection $categories;
         return $this;
     }
 
-    /**
-     * @return Collection<int, category>
-     */
-    public function getCategoryId(): Collection
+    public function getCategories(): Collection
     {
-        return $this->category_id;
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+            $category->setSubcategory($this);
+        }
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        if ($this->categories->removeElement($category)) {
+            if ($category->getSubcategory() === $this) {
+                $category->setSubcategory(null);
+            }
+        }
+        return $this;
     }
 
     public function getProductId(): ?Product
@@ -66,7 +78,11 @@ private Collection $categories;
     public function setProductId(Product $product_id): static
     {
         $this->product_id = $product_id;
-
         return $this;
     }
-}   
+
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+}

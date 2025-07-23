@@ -3,16 +3,12 @@
 {% block title %}Create Subcategory{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1>Create Subcategory</h1>
+<h1>Create Subcategory</h1>
 
-    {% for message in app.flashes('message') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit">Create</button>
+{{ form_end(form) }}
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button class="btn btn-success mt-3">Create</button>
-    {{ form_end(form) }}
-</div>
+<a href="{{ path('app_subcategory') }}">Back to List</a>
 {% endblock %}
