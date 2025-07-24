@@ -27,7 +27,7 @@
             <td>{{ product.name }}</td>
             <td>{{ product.description }}</td>
             <td>{{ product.price }}</td>
-            <td>{{ product.categoryId.id }}</td>
+            <td>{{ product.categoryId.name }}</td>
             <td>
                 <a href="{{ path('read_product', {'id': product.id}) }}">View</a> |
                 <a href="{{ path('edit_product', {'id': product.id}) }}">Edit</a> |

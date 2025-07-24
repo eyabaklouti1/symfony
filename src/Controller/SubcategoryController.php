@@ -37,13 +37,6 @@ final class SubcategoryController extends AbstractController
         $form = $this->createForm(SubcategoryType::class, $subcategory);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
-            $category = $this->em->getRepository(Category::class)->findOneBy(['name' => $category_id]);
-            $product = $this->em->getRepository(Product::class)->findOneBy(['name'=> $product_id]);
-            if (!$category || !$product){
-                throw $this->createNotFoundException('Category or Product not found');
-            }
-            $subcategory->setCategory($category);
-            $subcategory->setProduct($product);
         
             $this->em->persist($subcategory);
             $this->em->flush();

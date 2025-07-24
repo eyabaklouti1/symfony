@@ -16,11 +16,20 @@ class SubcategoryType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('category_id', EntityType::class, [
-                'class' => Category::class
+            ->add('categories', EntityType::class, [
+                'class' => Category::class,
+            'choice_label' => 'name',
+            'label' => 'Categories',
+            'placeholder' => 'Choose a category',
+             'multiple' => true,           //  Permet de sélectionner plusieurs catégories
+            'by_reference' => false       //  Obligatoire pour que addCategory() soit utilisé
             ])
+
             ->add('product_id', EntityType::class, [
-                'class' => Product::class
+                    'class' => Product::class,
+                    'choice_label' => 'name', 
+                    'label' => 'Product',
+                    'placeholder' => 'Choose a product',
             ])
             
             
