@@ -22,9 +22,10 @@ class Product
     #[ORM\Column]
     private ?float $price = null;
 
-    #[ORM\OneToOne(cascade: ['persist'])]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'RESTRICT')] //cascade: ['remove'] va tenter de supprimer la Category quand tu supprimes le Product → cela cause une erreur SQL si la Category est utilisée ailleurs.
-    private ?Category $category_id = null;
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
+
 
     public function getId(): ?int
     {
@@ -64,14 +65,14 @@ class Product
         return $this;
     }
 
-    public function getCategoryId(): ?Category
+    public function getCategory(): ?Category
     {
-        return $this->category_id;
+        return $this->category;
     }
 
-    public function setCategoryId(Category $category_id): static
+    public function setCategory(?Category $category): static
     {
-        $this->category_id = $category_id;
+        $this->category = $category;
 
         return $this;
     }

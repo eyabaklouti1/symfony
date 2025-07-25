@@ -17,10 +17,10 @@ class ProductType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('price')
-            ->add('category_id', EntityType::class, [
+            ->add('category', EntityType::class, [
                     'class' => Category::class,
-                    'choice_label' => 'name', // ← affichera le nom
-                    'label' => 'Categories',
+                    'choice_label' => 'name',
+                    'label' => 'Category',
                     'placeholder' => 'Choose a category',
             ])
             
