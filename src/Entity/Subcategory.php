@@ -22,7 +22,7 @@ class Subcategory
     private Collection $categories;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Product $product_id = null;
 
     public function __construct()

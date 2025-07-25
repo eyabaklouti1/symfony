@@ -25,12 +25,7 @@ class SubcategoryType extends AbstractType
             'by_reference' => false       //  Obligatoire pour que addCategory() soit utilisé
             ])
 
-            ->add('product_id', EntityType::class, [
-                    'class' => Product::class,
-                    'choice_label' => 'name', 
-                    'label' => 'Product',
-                    'placeholder' => 'Choose a product',
-            ])
+         
             
             
             

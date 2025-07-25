@@ -24,7 +24,7 @@
             <td> {% for category in subcategory.categories %}
                 {{ category.name }}{% if not loop.last %}, {% endif %}
                  {% endfor %}</td>
-            <td>{{ subcategory.productId.name }}</td>
+            
                 <a href="{{ path('read_subcategory', {'id': subcategory.id}) }}">View</a> |
                 <a href="{{ path('edit_subcategory', {'id': subcategory.id}) }}">Edit</a> |
                 <a href="{{ path('delete_subcategory', {'id': subcategory.id}) }}">Delete</a>
