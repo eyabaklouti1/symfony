@@ -11,5 +11,46 @@
 {{ form_end(form) }}
 
 <a href="{{ path('app_productcontroller') }}">Back to List</a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categorySelect = document.getElementById('product_category');
+    const subcategorySelect = document.getElementById('product_subcategory');
+
+    if (categorySelect && subcategorySelect) {
+        // Load subcategories on page load if category is already selected
+        if (categorySelect.value) {
+            loadSubcategories(categorySelect.value, subcategorySelect.value);
+        }
+
+        categorySelect.addEventListener('change', function() {
+            const categoryId = this.value;
+            loadSubcategories(categoryId);
+        });
+    }
+
+    function loadSubcategories(categoryId, selectedSubcategoryId = null) {
+        // Clear subcategory options
+        subcategorySelect.innerHTML = '<option value="">Choose a subcategory</option>';
+
+        if (categoryId) {
+            fetch(`{{ path('get_subcategories', {'categoryId': '__CATEGORY_ID__'}) }}`.replace('__CATEGORY_ID__', categoryId))
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(subcategory => {
+                        const option = document.createElement('option');
+                        option.value = subcategory.id;
+                        option.textContent = subcategory.name;
+                        if (selectedSubcategoryId && subcategory.id == selectedSubcategoryId) {
+                            option.selected = true;
+                        }
+                        subcategorySelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    }
+});
+</script>
 {% endblock %}
 

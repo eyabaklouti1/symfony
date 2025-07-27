@@ -18,16 +18,16 @@ class Subcategory
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'subcategory', targetEntity: Category::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'subcategory', targetEntity: Category::class, cascade: ['persist'])]
     private Collection $categories;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Product $product_id = null;
+    #[ORM\OneToMany(mappedBy: 'subcategory', targetEntity: Product::class)]
+    private Collection $products;
 
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -70,14 +70,32 @@ class Subcategory
         return $this;
     }
 
-    public function getProductId(): ?Product
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
     {
-        return $this->product_id;
+        return $this->products;
     }
 
-    public function setProductId(Product $product_id): static
+    public function addProduct(Product $product): static
     {
-        $this->product_id = $product_id;
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setSubcategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            if ($product->getSubcategory() === $this) {
+                $product->setSubcategory(null);
+            }
+        }
+
         return $this;
     }
 

@@ -88,14 +88,32 @@ final class SubcategoryController extends AbstractController
         $subcategory = $this->em->getRepository(Subcategory::class)->find($id);
         if (!$subcategory){
             throw $this->createNotFoundException('Subcategory not found!');
+        }
+
+        // Check if there are categories associated with this subcategory
+        if ($subcategory->getCategories()->count() > 0) {
+            // Set subcategory to null for all associated categories
+            foreach ($subcategory->getCategories() as $category) {
+                $category->setSubcategory(null);
+            }
+        }
+
+        // Check if there are products associated with this subcategory
+        if ($subcategory->getProducts()->count() > 0) {
+            // Set subcategory to null for all associated products
+            foreach ($subcategory->getProducts() as $product) {
+                $product->setSubcategory(null);
+            }
+        }
+
+        try {
+            $this->em->remove($subcategory);
+            $this->em->flush();
+            $this->addFlash('message','Deleted Successfully.');
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Error deleting subcategory: ' . $e->getMessage());
+        }
+
         return $this->redirectToRoute('app_subcategory');
-           
     }
-    $this->em->remove($subcategory);
-    $this->em->flush();
-
-    $this->addFlash('message','Deleted Successfully.');
-    return $this->redirectToRoute('app_subcategory');
-
-}
 }

@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Form\ProductType;
 use App\Entity\Product;
-use App\Entity\Category; 
+use App\Entity\Category;
+use App\Entity\Subcategory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -107,5 +109,34 @@ public function createproduct(Request $request): Response
         return $this->redirectToRoute('app_productcontroller');
 
 
+    }
+
+    #[Route('/get-subcategories/{categoryId}', name: 'get_subcategories', methods: ['GET'])]
+    public function getSubcategories(int $categoryId): JsonResponse
+    {
+        $category = $this->em->getRepository(Category::class)->find($categoryId);
+
+        if (!$category) {
+            return new JsonResponse([]);
+        }
+
+        // Find all subcategories that contain this category
+        $subcategories = $this->em->getRepository(Subcategory::class)
+            ->createQueryBuilder('s')
+            ->join('s.categories', 'c')
+            ->where('c.id = :categoryId')
+            ->setParameter('categoryId', $categoryId)
+            ->getQuery()
+            ->getResult();
+
+        $data = [];
+        foreach ($subcategories as $subcategory) {
+            $data[] = [
+                'id' => $subcategory->getId(),
+                'name' => $subcategory->getName()
+            ];
+        }
+
+        return new JsonResponse($data);
     }
 }

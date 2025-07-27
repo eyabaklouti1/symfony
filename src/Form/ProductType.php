@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Entity\Subcategory;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,6 +23,16 @@ class ProductType extends AbstractType
                     'choice_label' => 'name',
                     'label' => 'Category',
                     'placeholder' => 'Choose a category',
+                    'attr' => ['id' => 'product_category']
+            ])
+            ->add('subcategory', EntityType::class, [
+                    'class' => Subcategory::class,
+                    'choice_label' => 'name',
+                    'label' => 'Subcategory',
+                    'placeholder' => 'Choose a subcategory',
+                    'required' => false,
+                    'attr' => ['id' => 'product_subcategory'],
+                    'choices' => [] // Will be populated via AJAX
             ])
             
             

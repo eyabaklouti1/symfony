@@ -17,6 +17,7 @@
             <th>Description</th>
             <th>Price</th>
             <th>Category</th>
+            <th>Subcategory</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -28,6 +29,7 @@
             <td>{{ product.description }}</td>
             <td>{{ product.price }}</td>
             <td>{{ product.category.name }}</td>
+            <td>{{ product.subcategory ? product.subcategory.name : 'N/A' }}</td>
             <td>
                 <a href="{{ path('read_product', {'id': product.id}) }}">View</a> |
                 <a href="{{ path('edit_product', {'id': product.id}) }}">Edit</a> |
@@ -35,7 +37,7 @@
             </td>
         </tr>
     {% else %}
-        <tr><td colspan="6">No products found.</td></tr>
+        <tr><td colspan="7">No products found.</td></tr>
     {% endfor %}
     </tbody>
 </table>
