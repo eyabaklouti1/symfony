@@ -12,6 +12,12 @@
     </head>
     <body>
         {% block body %}
+        <h1>Hello World</h1>
+        {% if app.user %}
+             <form method="post" action="{{ path('app_logout') }}">
+                 <button type="submit">Logout</button>
+             </form>
+        {% endif %}
         
         {% endblock %}
     </body>

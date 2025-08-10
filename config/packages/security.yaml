@@ -7,9 +7,7 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-            # the class of the entity that represents users
                 class: App\Entity\User
-            # the property to query by - e.g. email, username, etc               
                 property: email
     firewalls:
         dev:
@@ -27,9 +25,9 @@ security:
                 target: app_login
             
             #Instead of giving many roles to each user, you can define role inheritance rules by creating a role hierarchy:
-            role_hierarchy:
-                ROLE_ADMIN: ROLE_USER
-                ROLE_SUPER_ADMIN: ROLE_ADMIN
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
 
 
 

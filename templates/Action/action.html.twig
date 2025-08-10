@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <h1>This is the Action Dashboard</h1>
+
+  {% if app.user %}
+    <div>
+      <a href="{{ path('admin') }}">Access to admin</a>
+      <br>
+      {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <a href="{{ path('super_admin') }}">Access to super admin</a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}
