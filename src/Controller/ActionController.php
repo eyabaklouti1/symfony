@@ -9,21 +9,21 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ActionController extends AbstractController
 {
-    #[Route('/admin' , name: 'admin')]
+    #[Route('/admin', name: 'admin', methods: ['GET'])]
     public function admindashboard(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN' ,null,'User tried to access /admin without ROLE_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'User tried to access /admin without ROLE_ADMIN');
           return $this->render('Action/action.html.twig', [
             'title' => 'Admin Dashboard',
         ]);
     }
     #[IsGranted('ROLE_SUPER_ADMIN')]
-    #[Route('/super_admin' , name: 'super_admin')]
+    #[Route('/super_admin', name: 'super_admin', methods: ['GET'])]
     public function super_admindashboard(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN' ,null,'User tried to access /super_admin without ROLE_SUPER_ADMIN');
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'User tried to access /super_admin without ROLE_SUPER_ADMIN');
           return $this->render('Action/action.html.twig', [
-            'title' => 'Admin Dashboard',
+            'title' => 'Super_Admin Dashboard',
         ]);
     }
 
