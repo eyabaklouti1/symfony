@@ -3,33 +3,33 @@
 {% block title %}Product List{% endblock %}
 
 {% block body %}
-<h1 class="text-red-500 text-4xl font-bold underline">Product List</h1>
+<h1 >Product List</h1>
 
 {% for message in app.flashes('message') %}
     <div class="alert alert-success">{{ message }}</div>
 {% endfor %}
 
-<table border="1" cellpadding="10">
+<table class="border border-gray-300 w-full">
     <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Subcategory</th>
-            <th>Actions</th>
+        <tr class="bg-gray-100">
+            <th class="px-4 py-2 text-lef">ID</th>
+            <th class="px-4 py-2 text-lef">Name</th>
+            <th class="px-4 py-2 text-lef">Description</th>
+            <th class="px-4 py-2 text-lef">Price</th>
+            <th class="px-4 py-2 text-lef">Category</th>
+            <th class="px-4 py-2 text-lef">Subcategory</th>
+            <th class="px-4 py-2 text-lef">Actions</th>
         </tr>
     </thead>
     <tbody>
     {% for product in products %}
-        <tr>
-            <td>{{ product.id }}</td>
-            <td>{{ product.name }}</td>
-            <td>{{ product.description }}</td>
-            <td>{{ product.price }}</td>
-            <td>{{ product.category.name }}</td>
-            <td>{{ product.subcategory ? product.subcategory.name : 'N/A' }}</td>
+        <tr  class="border-t border-gray-200 hover:bg-gray-50">
+            <td class="px-4 py-2">{{ product.id }}</td>
+            <td class="px-4 py-2">{{ product.name }}</td>
+            <td class="px-4 py-2">{{ product.description }}</td>
+            <td class="px-4 py-2">{{ product.price }}</td>
+            <td class="px-4 py-2">{{ product.category.name }}</td>
+            <td class="px-4 py-2">{{ product.subcategory ? product.subcategory.name : 'N/A' }}</td>
             <td>
                 <a href="{{ path('read_product', {'id': product.id}) }}">View</a> |
                 <a href="{{ path('edit_product', {'id': product.id}) }}">Edit</a> |
