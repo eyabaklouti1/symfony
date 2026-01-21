@@ -1,34 +1,66 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Accueil - Boutique{% endblock %}
 
 {% block body %}
+<div class="container mx-auto px-4 py-8">
 
-    <h1>Bienvenue sur la page d'accueil</h1>
+    <!-- Section bienvenue & authentification -->
+    <div class="mb-10">
+        <h1 class="text-3xl font-bold text-gray-800">Bienvenue sur la boutique !</h1>
 
-    <p>
-        Ceci est la page Home de mon site Symfony.
-    </p>
+        {% if app.user %}
+            <p class="mt-2 text-gray-600">
+                Connecté en tant que : <strong>{{ app.user.userIdentifier }}</strong>
+            </p>
+            <form method="post" action="{{ path('app_logout') }}" class="inline-block mt-2">
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+                    Déconnexion
+                </button>
+            </form>
+        {% else %}
+            <p class="mt-2 text-gray-600">Vous n'êtes pas connecté.</p>
+            <a href="{{ path('app_login') }}" class="inline-block mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                Se connecter
+            </a>
+        {% endif %}
+    </div>
 
-    {% if app.user %}
-        <p>
-            Connecté en tant que :
-            <strong>{{ app.user.userIdentifier }}</strong>
-        </p>
+    <!-- Section produits -->
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Nos produits</h2>
 
-        <form method="post" action="{{ path('app_logout') }}">
-            <button type="submit">
-                Logout
-            </button>
-        </form>
+    {% if products|length == 0 %}
+        <p class="text-gray-600">Aucun produit disponible pour le moment.</p>
     {% else %}
-        <p>
-            Vous n'êtes pas connecté.
-        </p>
-
-        <a href="{{ path('app_login') }}">
-            Se connecter
-        </a>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Catégorie</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sous-catégorie</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for product in products %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ product.id }}</td>
+                            <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ product.name }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">{{ product.price }} €</td>
+                            <td class="px-4 py-3 text-sm text-gray-700">
+                                {{ product.category ? product.category.name : '—' }}
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-700">
+                                {{ product.subcategory ? product.subcategory.name : '—' }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endif %}
 
+</div>
 {% endblock %}
